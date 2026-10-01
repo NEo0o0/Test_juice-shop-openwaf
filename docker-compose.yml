@@ -1,0 +1,28 @@
+services:
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    # Port 3000 is exposed internally to other containers, but not mapped to the host
+    expose:
+      - "3000"
+    networks:
+      - waf-network
+    restart: always
+
+  wafbrain_proxy:
+    build:
+      context: ./wafbrain_proxy
+      dockerfile: Dockerfile
+    container_name: wafbrain_proxy
+    # The proxy acts as the ingress, exposing port 80 to the host
+    ports:
+      - "80:80"
+    depends_on:
+      - juice-shop
+    networks:
+      - waf-network
+    restart: always
+
+networks:
+  waf-network:
+    driver: bridge

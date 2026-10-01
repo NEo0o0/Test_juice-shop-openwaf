@@ -1,0 +1,4 @@
+flask
+requests
+waf-brain
+tensorflow<2.13.0
